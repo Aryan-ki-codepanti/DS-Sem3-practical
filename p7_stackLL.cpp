@@ -40,27 +40,22 @@ public:
         top = newNode;
     }
 
-    void pop()
+    int pop()
     {
         // Case 1 : Empty stack
         if (isEmpty())
         {
             cout << "Can't delete top from empty stack" << endl;
-            return;
+            return GARBAGE;
         }
 
+        // Case 2 : general
         Node *delNode;
-        // Case 2 : one node in  stack
         delNode = top;
+        int x = top->data;
         top = top->next;
         delete delNode;
-    }
-
-    int topEl()
-    {
-        if (isEmpty())
-            return GARBAGE;
-        return top->data;
+        return x;
     }
 
     void display()
@@ -88,7 +83,7 @@ int main()
     s.push(5);
     s.push(7);
     s.display();
-    s.pop();
+    cout << s.pop() << endl;
     s.display();
     return 0;
 }
