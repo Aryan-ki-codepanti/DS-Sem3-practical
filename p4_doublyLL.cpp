@@ -7,22 +7,22 @@ class Node
 {
 public:
     int data;
-    Node *next;
+    Node *next, *prev;
 
     Node(int a)
     {
         data = a;
-        next = NULL;
+        prev = next = NULL;
     }
 };
 
-class SinglyLinkedList
+class DoublyLinkedList
 {
     Node *head, *tail;
-    friend void concatenate(SinglyLinkedList &, SinglyLinkedList &);
+    friend void concatenate(DoublyLinkedList &, DoublyLinkedList &);
 
 public:
-    SinglyLinkedList()
+    DoublyLinkedList()
     {
         head = tail = NULL;
     }
@@ -65,6 +65,7 @@ public:
 
         // case 2 : other
         tail->next = newNode;
+        newNode->prev = tail;
         tail = newNode;
     }
 
@@ -80,8 +81,8 @@ public:
         }
 
         // Case 2 : 1 or more nodes present already
-
         newNode->next = head;
+        head->prev = newNode;
         head = newNode;
     }
 
@@ -120,10 +121,14 @@ public:
             return;
         }
 
-        // Case 5: general case
+        // Case 5: general case insert between and ptr nxt
         Node *newNode = new Node(a);
-        newNode->next = ptr->next;
+        Node *nxt = ptr->next;
+
+        newNode->next = nxt;
+        nxt->prev = newNode;
         ptr->next = newNode;
+        newNode->prev = ptr;
     }
 
     void deleteHead()
@@ -147,6 +152,7 @@ public:
 
         // Case 3 : Other
         head = head->next;
+        head->prev = NULL;
         delete delNode;
     }
 
@@ -170,12 +176,10 @@ public:
         }
 
         // Case 3 : Other
-        Node *current = head;
-        while (current->next != tail)
-            current = current->next;
 
-        current->next = NULL;
-        tail = current;
+        Node *newTail = tail->prev;
+        newTail->next = NULL;
+        tail = newTail;
         delete delNode;
     }
 
@@ -208,7 +212,9 @@ public:
             ptr = ptr->next;
 
         Node *delNode = ptr->next;
-        ptr->next = delNode->next;
+        Node *nxt = delNode->next;
+        ptr->next = nxt;
+        nxt->prev = ptr;
         delete delNode;
     }
 
@@ -248,7 +254,9 @@ public:
 
         // Case 5 : General
         Node *delNode = ptr->next;
-        ptr->next = delNode->next;
+        Node *nxt = delNode->next;
+        ptr->next = nxt;
+        nxt->prev = ptr;
         delete delNode;
     }
 
@@ -263,44 +271,40 @@ public:
         Node *ptr = head;
         while (ptr != NULL)
         {
-            cout << ptr->data << " -> ";
+            cout << ptr->data << " <-> ";
             ptr = ptr->next;
         }
         cout << "NULL" << endl;
     }
 };
 
-void concatenate(SinglyLinkedList &l1, SinglyLinkedList &l2)
+void concatenate(DoublyLinkedList &l1, DoublyLinkedList &l2)
 {
     if (l1.head == NULL || l2.head == NULL)
         return;
 
     l1.tail->next = l2.head;
+    l2.head->prev = l1.tail;
     l1.tail = l2.tail;
 }
 
 int main()
 {
 
-    SinglyLinkedList l1, l2;
+    DoublyLinkedList l1, l2;
 
     l1.addOnHead(3);
     l1.addOnHead(4);
     l1.addOnHead(5);
 
-    l2.addOnTail(3);
-    l2.addOnTail(4);
-    l2.addOnTail(5);
+    l2.addOnTail(8);
+    l2.addOnTail(9);
+    l2.addOnTail(7);
 
     l1.display();
     l2.display();
 
     concatenate(l1, l2);
     l1.display();
-    l2.display();
-
-    l1.addOnTail(7);
-    l1.display();
-
     return 0;
 }
