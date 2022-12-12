@@ -44,34 +44,50 @@ public:
         return false;
     }
 
-    void inorder(Node *current)
+    void inorder_recursive(Node *current)
     {
         if (current == NULL)
             return;
 
-        inorder(current->left);
+        inorder_recursive(current->left);
         cout << current->data << " ";
-        inorder(current->right);
+        inorder_recursive(current->right);
     }
 
-    void preorder(Node *current)
+    void preorder_recursive(Node *current)
     {
         if (current == NULL)
             return;
 
         cout << current->data << " ";
-        preorder(current->left);
-        preorder(current->right);
+        preorder_recursive(current->left);
+        preorder_recursive(current->right);
     }
 
-    void postorder(Node *current)
+    void postorder_recursive(Node *current)
     {
         if (current == NULL)
             return;
 
-        postorder(current->left);
-        postorder(current->right);
+        postorder_recursive(current->left);
+        postorder_recursive(current->right);
         cout << current->data << " ";
+    }
+
+    void inorder()
+    {
+        inorder_recursive(root);
+        cout << endl;
+    }
+    void preorder()
+    {
+        preorder_recursive(root);
+        cout << endl;
+    }
+    void postorder()
+    {
+        postorder_recursive(root);
+        cout << endl;
     }
 
     void level_order()
@@ -251,19 +267,15 @@ int main()
     b.insert_element(2);
     b.insert_element(26);
 
-    b.inorder(b.root);
-    cout << endl;
+    b.inorder();
 
     b.delete_element(7);
-    b.inorder(b.root);
-    cout << endl;
+    b.inorder();
     b.delete_element(28);
-    b.inorder(b.root);
-    cout << endl;
+    b.inorder();
 
     b.delete_element(18);
-    b.inorder(b.root);
-    cout << endl;
+    b.inorder();
     cout << "Height : " << b.get_height(b.root) << endl;
 
     return 0;
